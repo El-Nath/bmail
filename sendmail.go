@@ -7,14 +7,14 @@ import (
 	"net/smtp"
 )
 
-func NewSender(Username, Password string) Sender {
-	return Sender{Username, Password}
+func NewSender(Username, Password, Server, Port string) Sender {
+	return Sender{Username, Password, Server, Port}
 }
 
 func (sender Sender) SendMail(Dest []string, Subject, bodyMessage string) (bool, string) {
 
-	err := smtp.SendMail(SMTPServer+":587",
-		smtp.PlainAuth("", sender.User, sender.Password, SMTPServer),
+	err := smtp.SendMail(sender.Server+":"+sender.Port,
+		smtp.PlainAuth("", sender.User, sender.Password, sender.Server),
 		sender.User, Dest, []byte(bodyMessage))
 
 	if err != nil {
